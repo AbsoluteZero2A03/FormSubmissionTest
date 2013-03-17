@@ -4,38 +4,36 @@
 	<head>
 		<meta charset="UTF-8">
 		<script src = "http://localhost:3000/socket.io/socket.io.js"></script>
-		<script type="javascript">
-		(function () {
-			var socket = io.connect('http://localhost:3000');
-			
-			document.getElementbyId('save').onclick = function() {
-				if ((documment.getElementbyId('chem_name').value == "") || (document.getElementbyId('chem_form').value == ""))
-				{
-					alert("Enter both name and formula.");
-				}
-				var data = {
-					name : document.getElementbyId('chem_name').value(),
-					formula : document.getElementbyId('chem_form').value()
-				};
-				socket.emit('addch', data)
-				document.getElementbyId('chem_name').value('');
-				document.getElementbyId('chem_form').value('');
-			};
-			socket.on('populate', function(data) {
-				var out = "";
-				for (i=0;i<data.length(),i++) {
-					out+='<li>'+data[i].name+' : '+data[i].formula+'</li>';
-				}
-				document.getElementbyId('chems').innerHTML = out;			
-			});
-		})();
+		<script type="text/javascript">
 		
+		var socket = io.connect('http://localhost:3000');
+		
+		function butclick() {
+			if ((document.getElementById('chem_name').value == '') || (document.getElementById('chem_form').value == ''))
+			{
+				alert("Enter both name and formula.");
+			}
+			var data = {
+				name : document.getElementById('chem_name').value,
+				formula : document.getElementById('chem_form').value
+			};
+			socket.emit('addch', data)
+			document.getElementById('chem_name').value = '';
+			document.getElementById('chem_form').value = '';
+		}
+		socket.on('populate', function(data) {
+			var out = "";
+			/*for (obj in data) {
+				out+="<li>"obj.name+" : "+obj.formula+"</li>";
+			}*/
+			document.getElementById('chems').innerHTML = out;			
+		});
 		</script>
 	</head>
 	<body>
 	<div>Name: <input type="text" id='chem_name' value=""></div>
 	<div>Formula <input type="text" id='chem_form' value=""></div>
-	<div><input type="button" value="Save" id='save'></div>
+	<div><input type="button" value="Save" id='save' onclick="butclick()"></div>
 	
 	<br />
 	

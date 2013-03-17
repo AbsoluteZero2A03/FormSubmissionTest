@@ -2,6 +2,7 @@ var mysql = require('mysql');
 var MYSQL_USERNAME = 'root'
 var MYSQL_PASSWORD = 'canucks'
 var connection = mysql.createConnection({
+	debug: true,
 	host: "localhost",
 	port: 3000,
 	user: MYSQL_USERNAME,
@@ -9,6 +10,10 @@ var connection = mysql.createConnection({
 });
 
 connection.connect();
+
+connection.query('DROP DATABASE IF EXISTS dba', function(err) {
+  if (err) { throw err; }
+});
 
 connection.query("CREATE DATABASE dba", function (err) {
 	if (err) {throw err;}
@@ -30,14 +35,17 @@ connection.query(q,function(err) {
 
 function add_chem(data,callback)
 {
-	client.query("insert into quid (name,formula) values (?,?)", [data.name,data.formula], function(err,info) {
+	connection.query("INSERT INTO quid (name,formula) VALUES (?,?);", [data.name, data.formula], function(err,info) {
+		if (err) {throw err;}
 		callback(info.insertId);
+		console.log(info.insertId);
 	});
 }
 
 function get_chem(callback)
 {
-	client.query("select * from quid", function(err,results,fields) {
+	connection.query("SELECT * FROM quid;", function(err,results,fields) {
+		console.log(results);
 		callback(results);
 	});
 }
@@ -45,4 +53,4 @@ function get_chem(callback)
 exports.add_chem = add_chem;
 exports.get_chem = get_chem;
 
-connection.end();
+//connection.end();

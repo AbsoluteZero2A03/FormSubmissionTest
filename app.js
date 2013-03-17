@@ -1,5 +1,3 @@
-#!/usr/bin/node
-
 var http = require('http');
 var fs = require('fs');
 var dbh = require('./dbh.js');
